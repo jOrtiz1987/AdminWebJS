@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config';
 import Edificio from './Edificio';
 
 class EdificiosHistoricos extends React.Component {
@@ -11,13 +12,13 @@ class EdificiosHistoricos extends React.Component {
       showAddEditForm: false,
       editUserData: null, // Datos del edificio a editar
       categorias: [],
-      formData:{
+      formData: {
         descripcion: '',
         latitud: '',
         longitud: '',
         referenciaImagen: '',
         contenido: '',
-        categoria: {id:''},
+        categoria: { id: '' },
       }
     };
   }
@@ -52,7 +53,7 @@ class EdificiosHistoricos extends React.Component {
 
   fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/edificios');
+      const response = await axios.get(`${API_BASE_URL}/api/edificios`);
       this.setState({ data: response.data });
     } catch (error) {
       this.setState({ error: 'Error fetching data' });
@@ -61,7 +62,7 @@ class EdificiosHistoricos extends React.Component {
 
   fetchCategorias = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/categorias');
+      const response = await axios.get(`${API_BASE_URL}/api/categorias`);
       this.setState({ categorias: response.data });
     } catch (error) {
       this.setState({ error: 'Error fetching categories' });
@@ -71,29 +72,29 @@ class EdificiosHistoricos extends React.Component {
   // Método para agregar edificio
   addUser = async (userData) => {
     try {
-      await axios.post('http://localhost:8080/api/edificios', this.state.formData);
+      await axios.post(`${API_BASE_URL}/api/edificios`, this.state.formData);
       this.fetchData(); // Recargar la lista de edificios
       this.handleCloseForm();
     } catch (error) {
       this.setState({ error: 'Error adding data' });
     }
   };
-  
+
   // Método para modificar edificio
   modifyUser = async (userId, updatedData) => {
     try {
-      await axios.put(`http://localhost:8080/api/edificios/${userId}`, this.state.formData);
+      await axios.put(`${API_BASE_URL}/api/edificios/${userId}`, this.state.formData);
       this.fetchData(); // Recargar la lista de edificios
       this.handleCloseForm();
     } catch (error) {
       this.setState({ error: 'Error modify data' });
     }
   };
-  
+
   // Método para eliminar edificio
   deleteUser = async (userId) => {
     try {
-      await axios.delete(`http://localhost:8080/api/edificios/${userId}`);
+      await axios.delete(`${API_BASE_URL}/api/edificios/${userId}`);
       this.fetchData(); // Recargar la lista de edificios
     } catch (error) {
       this.setState({ error: 'Error delete data' });
@@ -102,12 +103,16 @@ class EdificiosHistoricos extends React.Component {
 
   // Manejar la apertura del formulario con datos para editar o vacío para agregar
   handleShowForm = (userData = null) => {
-    this.setState({ showAddEditForm: true, editUserData: userData, formData: userData || { descripcion: '',
-    latitud: '',
-    longitud: '',
-    referenciaImagen: '',
-    contenido: '',
-    categoria: {id:''} } });
+    this.setState({
+      showAddEditForm: true, editUserData: userData, formData: userData || {
+        descripcion: '',
+        latitud: '',
+        longitud: '',
+        referenciaImagen: '',
+        contenido: '',
+        categoria: { id: '' }
+      }
+    });
   };
 
   // Manejar el cierre del formulario
@@ -135,23 +140,23 @@ class EdificiosHistoricos extends React.Component {
               <form>
                 <div className="form-group">
                   <label>Edificio Historico:</label>
-                  <input type="text" name="descripcion" className="form-control" value={this.state.formData.descripcion} onChange={this.handleFormChange}/>
+                  <input type="text" name="descripcion" className="form-control" value={this.state.formData.descripcion} onChange={this.handleFormChange} />
                 </div>
                 <div className="form-group">
                   <label>Latitud:</label>
-                  <input type="text" name="latitud" className="form-control" value={this.state.formData.latitud} onChange={this.handleFormChange}/>
+                  <input type="text" name="latitud" className="form-control" value={this.state.formData.latitud} onChange={this.handleFormChange} />
                 </div>
                 <div className="form-group">
                   <label>Longitud:</label>
-                  <input type="text" name="longitud" className="form-control" value={this.state.formData.longitud} onChange={this.handleFormChange}/>
+                  <input type="text" name="longitud" className="form-control" value={this.state.formData.longitud} onChange={this.handleFormChange} />
                 </div>
                 <div className="form-group">
                   <label>Contenido:</label>
-                  <input type="text" name="contenido" className="form-control" value={this.state.formData.contenido} onChange={this.handleFormChange}/>
+                  <input type="text" name="contenido" className="form-control" value={this.state.formData.contenido} onChange={this.handleFormChange} />
                 </div>
                 <div className="form-group">
                   <label>Referencia Imagen:</label>
-                  <input type="text" name="referenciaImagen" className="form-control" value={this.state.formData.referenciaImagen} onChange={this.handleFormChange}/>
+                  <input type="text" name="referenciaImagen" className="form-control" value={this.state.formData.referenciaImagen} onChange={this.handleFormChange} />
                 </div>
                 <div className="form-group">
                   <label>Categoria:</label>
@@ -163,7 +168,7 @@ class EdificiosHistoricos extends React.Component {
                     <option value="">Seleccione una categoría</option>
                     {this.state.categorias.map((categoria) => (
                       <option key={categoria.id} value={categoria.id}>
-                        {categoria.descripcion} 
+                        {categoria.descripcion}
                       </option>
                     ))}
                   </select>
@@ -185,16 +190,16 @@ class EdificiosHistoricos extends React.Component {
 
     return (
       <div className="container mt-3">
-      <h2 className="mb-4">Edificios Historicos:</h2>
-      <button className="btn btn-primary mb-2" onClick={() => this.handleShowForm()}>Agregar Edificio Historico</button>
-      {showAddEditForm && this.renderForm()}
+        <h2 className="mb-4">Edificios Historicos:</h2>
+        <button className="btn btn-primary mb-2" onClick={() => this.handleShowForm()}>Agregar Edificio Historico</button>
+        {showAddEditForm && this.renderForm()}
         <div className='container'>
           <div className='row'>
             {data.map((item) => (
               <div className='col-md-4'>
-                <Edificio datos={item}/>
-                  <button className="btn btn-secondary btn-sm mr-2" onClick={() => this.handleShowForm(item)}>Editar</button>
-                  <button className="btn btn-danger btn-sm" onClick={() => this.deleteUser(item.id)}>Eliminar</button>
+                <Edificio datos={item} />
+                <button className="btn btn-secondary btn-sm mr-2" onClick={() => this.handleShowForm(item)}>Editar</button>
+                <button className="btn btn-danger btn-sm" onClick={() => this.deleteUser(item.id)}>Eliminar</button>
               </div>
             ))}
           </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config';
 
 class PeriodoVacacional extends React.Component {
   constructor(props) {
@@ -10,13 +11,13 @@ class PeriodoVacacional extends React.Component {
       showAddEditForm: false,
       editUserData: null, // Datos del usuario a editar
       usuarios: [],
-      formData:{
+      formData: {
         presupuesto: '',
         fechaInicioEstimada: '',
         fechaFinEstimada: '',
         fechaInicioReal: '',
         fechaFinReal: '',
-        usuario: {idUsuario:''},
+        usuario: { idUsuario: '' },
       }
     };
   }
@@ -51,7 +52,7 @@ class PeriodoVacacional extends React.Component {
 
   fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/periodos');
+      const response = await axios.get(`${API_BASE_URL}/api/periodos`);
       this.setState({ data: response.data });
     } catch (error) {
       this.setState({ error: 'Error fetching data' });
@@ -60,7 +61,7 @@ class PeriodoVacacional extends React.Component {
 
   fetchUsuarios = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/usuarios');
+      const response = await axios.get(`${API_BASE_URL}/api/usuarios`);
       this.setState({ usuarios: response.data });
     } catch (error) {
       this.setState({ error: 'Error fetching usuarios' });
@@ -72,31 +73,31 @@ class PeriodoVacacional extends React.Component {
     try {
       this.state.formData.fechaInicioReal = this.state.formData.fechaInicioEstimada;
       this.state.formData.fechaFinReal = this.state.formData.fechaFinEstimada;
-      await axios.post('http://localhost:8080/api/periodos', this.state.formData);
+      await axios.post(`${API_BASE_URL}/api/periodos`, this.state.formData);
       this.fetchData(); // Recargar la lista de periodos
       this.handleCloseForm();
     } catch (error) {
       this.setState({ error: 'Error adding data' });
     }
   };
-  
+
   // Método para modificar usuario
   modifyUser = async (userId, updatedData) => {
     try {
       this.state.formData.fechaInicioReal = this.state.formData.fechaInicioEstimada;
       this.state.formData.fechaFinReal = this.state.formData.fechaFinEstimada;
-      await axios.put(`http://localhost:8080/api/periodos/${userId}`, this.state.formData);
+      await axios.put(`${API_BASE_URL}/api/periodos/${userId}`, this.state.formData);
       this.fetchData(); // Recargar la lista de periodos
       this.handleCloseForm();
     } catch (error) {
       this.setState({ error: 'Error modify data' });
     }
   };
-  
+
   // Método para eliminar usuario
   deleteUser = async (userId) => {
     try {
-      await axios.delete(`http://localhost:8080/api/periodos/${userId}`);
+      await axios.delete(`${API_BASE_URL}/api/periodos/${userId}`);
       this.fetchData(); // Recargar la lista de periodos
     } catch (error) {
       this.setState({ error: 'Error delete data' });
@@ -105,12 +106,16 @@ class PeriodoVacacional extends React.Component {
 
   // Manejar la apertura del formulario con datos para editar o vacío para agregar
   handleShowForm = (userData = null) => {
-    this.setState({ showAddEditForm: true, editUserData: userData, formData: userData || { presupuesto: '',
-    fechaInicioEstimada: '',
-    fechaFinEstimada: '',
-    fechaInicioReal: '',
-    fechaFinReal: '',
-    usuario: {idUsuario:''} } });
+    this.setState({
+      showAddEditForm: true, editUserData: userData, formData: userData || {
+        presupuesto: '',
+        fechaInicioEstimada: '',
+        fechaFinEstimada: '',
+        fechaInicioReal: '',
+        fechaFinReal: '',
+        usuario: { idUsuario: '' }
+      }
+    });
   };
 
   // Manejar el cierre del formulario
@@ -136,7 +141,7 @@ class PeriodoVacacional extends React.Component {
             </div>
             <div className="modal-body">
               <form>
-              <div className="form-group">
+                <div className="form-group">
                   <label>Usuario:</label>
                   <select
                     name="idUsuario"
@@ -146,22 +151,22 @@ class PeriodoVacacional extends React.Component {
                     <option value="">Seleccione un usuario</option>
                     {this.state.usuarios.map((usuario) => (
                       <option key={usuario.idUsuario} value={usuario.idUsuario}>
-                        {usuario.correo} 
+                        {usuario.correo}
                       </option>
                     ))}
                   </select>
                 </div>
                 <div className="form-group">
                   <label>Presupuesto:</label>
-                  <input type="text" name="presupuesto" className="form-control" value={this.state.formData.presupuesto} onChange={this.handleFormChange}/>
+                  <input type="text" name="presupuesto" className="form-control" value={this.state.formData.presupuesto} onChange={this.handleFormChange} />
                 </div>
                 <div className="form-group">
                   <label>Inicio Periodo Vacacional:</label>
-                  <input type="date" name="fechaInicioEstimada" className="form-control" value={this.state.formData.fechaInicioEstimada} onChange={this.handleFormChange}/>
+                  <input type="date" name="fechaInicioEstimada" className="form-control" value={this.state.formData.fechaInicioEstimada} onChange={this.handleFormChange} />
                 </div>
                 <div className="form-group">
                   <label>Fin Periodo Vacacional:</label>
-                  <input type="date" name="fechaFinEstimada" className="form-control" value={this.state.formData.fechaFinEstimada} onChange={this.handleFormChange}/>
+                  <input type="date" name="fechaFinEstimada" className="form-control" value={this.state.formData.fechaFinEstimada} onChange={this.handleFormChange} />
                 </div>
               </form>
             </div>
@@ -180,45 +185,45 @@ class PeriodoVacacional extends React.Component {
 
     return (
       <div className="container mt-3">
-      <h2 className="mb-4">Periodos Vacacionales:</h2>
-      <button className="btn btn-primary mb-2" onClick={() => this.handleShowForm()}>Agregar Periodo Vacacional</button>
-      {showAddEditForm && this.renderForm()}
-      {error ? (
-        <div className="alert alert-danger" role="alert">
-          {error}
-        </div>
-      ) : (
-        <div className="card">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Presupuesto</th>
-                <th>Periodo Vacacional Estimado</th>
-                <th>Periodo Vacacional Real</th>
-                <th>Usuario</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.idPeriodoVacacional}</td>
-                  <td>{item.presupuesto}</td>
-                  <td>{new Date(item.fechaInicioEstimada).toLocaleDateString('en-GB')} al {new Date(item.fechaFinEstimada).toLocaleDateString('en-GB')}</td>
-                  <td>{new Date(item.fechaInicioReal).toLocaleDateString('en-GB')} al {new Date(item.fechaFinReal).toLocaleDateString('en-GB')}</td>
-                  <td>{item.usuario.correo}</td>
-                  <td>
-                    <button className="btn btn-secondary btn-sm mr-2" onClick={() => this.handleShowForm(item)}>Editar</button>
-                    <button className="btn btn-danger btn-sm" onClick={() => this.deleteUser(item.idPeriodoVacacional)}>Eliminar</button>
-                  </td>
+        <h2 className="mb-4">Periodos Vacacionales:</h2>
+        <button className="btn btn-primary mb-2" onClick={() => this.handleShowForm()}>Agregar Periodo Vacacional</button>
+        {showAddEditForm && this.renderForm()}
+        {error ? (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        ) : (
+          <div className="card">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Presupuesto</th>
+                  <th>Periodo Vacacional Estimado</th>
+                  <th>Periodo Vacacional Real</th>
+                  <th>Usuario</th>
+                  <th>Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
+              </thead>
+              <tbody>
+                {data.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.idPeriodoVacacional}</td>
+                    <td>{item.presupuesto}</td>
+                    <td>{new Date(item.fechaInicioEstimada).toLocaleDateString('en-GB')} al {new Date(item.fechaFinEstimada).toLocaleDateString('en-GB')}</td>
+                    <td>{new Date(item.fechaInicioReal).toLocaleDateString('en-GB')} al {new Date(item.fechaFinReal).toLocaleDateString('en-GB')}</td>
+                    <td>{item.usuario.correo}</td>
+                    <td>
+                      <button className="btn btn-secondary btn-sm mr-2" onClick={() => this.handleShowForm(item)}>Editar</button>
+                      <button className="btn btn-danger btn-sm" onClick={() => this.deleteUser(item.idPeriodoVacacional)}>Eliminar</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     );
   }
 }

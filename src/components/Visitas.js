@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config';
 
 class Visitas extends React.Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class Visitas extends React.Component {
 
   fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/visitas');
+      const response = await axios.get(`${API_BASE_URL}/api/visitas`);
       this.setState({ data: response.data });
     } catch (error) {
       this.setState({ error: 'Error fetching data' });
@@ -28,36 +29,36 @@ class Visitas extends React.Component {
 
     return (
       <div className="container mt-3">
-      <h2 className="mb-4">Visitas:</h2>
-      {error ? (
-        <div className="alert alert-danger" role="alert">
-          {error}
-        </div>
-      ) : (
-        <div className="card">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Edificio Historico</th>
-                <th>Usuario</th>
-                <th>Fecha</th>
-                <th>Niños</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.idEdificioHistorico}</td>
-                  <td>{item.idUsuario}</td>
-                  <td>{item.fecha}</td>
-                  <td>{item.llevaNinos}</td>
+        <h2 className="mb-4">Visitas:</h2>
+        {error ? (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        ) : (
+          <div className="card">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Edificio Historico</th>
+                  <th>Usuario</th>
+                  <th>Fecha</th>
+                  <th>Niños</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
+              </thead>
+              <tbody>
+                {data.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.idEdificioHistorico}</td>
+                    <td>{item.idUsuario}</td>
+                    <td>{item.fecha}</td>
+                    <td>{item.llevaNinos}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     );
   }
 }
