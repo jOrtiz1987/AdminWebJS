@@ -196,7 +196,7 @@ class EdificiosHistoricos extends React.Component {
         <div className='container'>
           <div className='row'>
             {data.map((item) => (
-              <div className='col-md-4'>
+              <div className='col-md-4' key={item.id}>
                 <Edificio datos={item} />
                 <button className="btn btn-secondary btn-sm mr-2" onClick={() => this.handleShowForm(item)}>Editar</button>
                 <button className="btn btn-danger btn-sm" onClick={() => this.deleteUser(item.id)}>Eliminar</button>

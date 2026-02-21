@@ -10,6 +10,7 @@ import Visitas from './components/Visitas';
 import Categorias from './components/Categorias';
 import RegistroCoordenadas from './components/RegistroCoordenadas';
 import Login from './components/Login';
+import DataScience from './components/DataScience';
 
 // Componente Wrapper para proteger rutas que requieren autenticación
 const PrivateRoute = ({ children }) => {
@@ -58,6 +59,9 @@ function App() {
                 <li className="nav-item">
                   <Link className="nav-link" to="/registroCoordenadas">Mapa</Link>
                 </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/data-science">Ciencia de Datos</Link>
+                </li>
                 <li className="nav-item ms-lg-3 d-flex align-items-center mt-2 mt-lg-0">
                   <button onClick={handleLogout} className="btn btn-outline-light btn-sm shadow-sm rounded-pill px-3">
                     <i className="bi bi-box-arrow-right me-2"></i>Salir
@@ -78,6 +82,7 @@ function App() {
           <Route path="/periodos" element={<PrivateRoute><Periodos /></PrivateRoute>} />
           <Route path="/visitas" element={<PrivateRoute><Visitas /></PrivateRoute>} />
           <Route path="/registroCoordenadas" element={<PrivateRoute><RegistroCoordenadas /></PrivateRoute>} />
+          <Route path="/data-science" element={<PrivateRoute><DataScience /></PrivateRoute>} />
         </Routes>
       </div>
     </Router>
