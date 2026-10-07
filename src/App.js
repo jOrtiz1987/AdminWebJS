@@ -63,7 +63,7 @@ function App() {
                   <Link className="nav-link" to="/data-science">Ciencia de Datos</Link>
                 </li>
                 <li className="nav-item ms-lg-3 d-flex align-items-center mt-2 mt-lg-0">
-                  <button onClick={handleLogout} className="btn btn-outline-light btn-sm shadow-sm rounded-pill px-3">
+                  <button onClick={handleLogout} className="btn btn-outline-danger btn-sm shadow-sm rounded-pill px-3">
                     <i className="bi bi-box-arrow-right me-2"></i>Salir
                   </button>
                 </li>

@@ -84,3 +84,143 @@ h6 {
   object-fit: cover;
   width: 100%;
 }
+
+/* Custom Tabs for DataScience */
+.nav-tabs-custom {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.nav-link-custom {
+  color: var(--text-secondary);
+  font-weight: 600;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  border: none;
+  background: transparent;
+  border-bottom: 3px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-link-custom:hover {
+  color: var(--primary-color);
+  background-color: rgba(37, 99, 235, 0.03);
+}
+
+.nav-link-custom.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+  background-color: rgba(37, 99, 235, 0.05);
+}
+
+/* Metric Cards with Gradient Accents */
+.metric-card {
+  background: var(--surface-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s ease-in-out;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.metric-icon-container {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.4rem;
+}
+
+.bg-gradient-blue {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.bg-gradient-purple {
+  background: linear-gradient(135deg, #a855f7, #6b21a8);
+}
+
+.bg-gradient-green {
+  background: linear-gradient(135deg, #10b981, #047857);
+}
+
+.bg-gradient-red {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+}
+
+/* Search Bar styling */
+.search-container {
+  position: relative;
+  max-width: 400px;
+}
+
+.search-input {
+  padding-left: 2.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.search-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  outline: none;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+}
+
+/* Fade In Animation */
+.fade-in-tab {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Soft color helper classes */
+.bg-primary-soft {
+  background-color: rgba(37, 99, 235, 0.1) !important;
+  color: #1d4ed8 !important;
+}
+
+.bg-success-soft {
+  background-color: rgba(16, 185, 129, 0.1) !important;
+  color: #047857 !important;
+}
+
+.bg-danger-soft {
+  background-color: rgba(239, 68, 68, 0.1) !important;
+  color: #b91c1c !important;
+}

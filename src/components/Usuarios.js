@@ -10,6 +10,8 @@ class Usuarios extends React.Component {
       error: null,
       showAddEditForm: false,
       editUserData: null, // Datos del usuario a editar
+      currentPage: 1,
+      itemsPerPage: 10,
       formData: {
         nombre: '',
         correo: '',
@@ -149,8 +151,17 @@ class Usuarios extends React.Component {
     );
   };
 
+  setPage = (page) => {
+    this.setState({ currentPage: page });
+  };
+
   render() {
-    const { data, error, showAddEditForm } = this.state;
+    const { data, error, showAddEditForm, currentPage, itemsPerPage } = this.state;
+    
+    // Calcular paginación
+    const totalPages = Math.ceil(data.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
 
     return (
       <div className="container-fluid">
@@ -182,7 +193,7 @@ class Usuarios extends React.Component {
                   </tr>
                 </thead>
                 <tbody className="border-top-0">
-                  {data.map((item, index) => (
+                  {paginatedData.map((item, index) => (
                     <tr key={index}>
                       <td className="fw-bold text-secondary">#{item.idUsuario}</td>
                       <td className="fw-semibold">{item.nombre}</td>
@@ -206,6 +217,36 @@ class Usuarios extends React.Component {
                 </tbody>
               </table>
             </div>
+
+            {/* Controles de Paginación */}
+            {totalPages > 1 && (
+              <div className="d-flex justify-content-between align-items-center mt-3 p-3 border-top">
+                <span className="small text-secondary">
+                  Mostrando del {startIndex + 1} al {Math.min(startIndex + itemsPerPage, data.length)} de {data.length} usuarios
+                </span>
+                <nav>
+                  <ul className="pagination pagination-sm m-0">
+                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                      <button className="page-link" onClick={() => this.setPage(currentPage - 1)}>Anterior</button>
+                    </li>
+                    {[...Array(totalPages).keys()].map(pageIdx => {
+                      const pageNum = pageIdx + 1;
+                      if (totalPages > 10 && Math.abs(currentPage - pageNum) > 3 && pageNum !== 1 && pageNum !== totalPages) {
+                        return null;
+                      }
+                      return (
+                        <li key={pageNum} className={`page-item ${currentPage === pageNum ? 'active' : ''}`}>
+                          <button className="page-link" onClick={() => this.setPage(pageNum)}>{pageNum}</button>
+                        </li>
+                      );
+                    })}
+                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                      <button className="page-link" onClick={() => this.setPage(currentPage + 1)}>Siguiente</button>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            )}
           </div>
         )}
       </div>
