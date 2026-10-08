@@ -86,29 +86,25 @@ class Categorias extends React.Component {
     const { editUserData } = this.state;
     const isEdit = editUserData !== null;
 
-    // Formulario básico, se puede expandir con más campos según sea necesario
     return (
-      <div className="modal show" style={{ display: 'block' }}>
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">{isEdit ? 'Editar Categoria' : 'Agregar Categoria'}</h5>
-              <button type="button" className="close" onClick={this.handleCloseForm}>
-                <span>&times;</span>
-              </button>
+      <div className="modal show fade d-block" style={{ backgroundColor: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(3px)', zIndex: 1050 }}>
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content border-0 shadow-lg" style={{ borderRadius: 'var(--radius-lg)' }}>
+            <div className="modal-header border-bottom-0 pb-0">
+              <h5 className="modal-title fw-bold text-dark">{isEdit ? '🏷️ Editar Categoría' : '🏷️ Agregar Categoría'}</h5>
+              <button type="button" className="btn-close" onClick={this.handleCloseForm} aria-label="Close"></button>
             </div>
-            <div className="modal-body">
+            <div className="modal-body py-3">
               <form>
-                <div className="form-group">
-                  <label>Categoria:</label>
-                  <input type="text" name="descripcion" className="form-control" value={this.state.formData.descripcion} onChange={this.handleFormChange} />
+                <div className="mb-2">
+                  <label className="form-label fw-semibold text-secondary small">Nombre de la Categoría:</label>
+                  <input type="text" name="descripcion" className="form-control" value={this.state.formData.descripcion} onChange={this.handleFormChange} placeholder="Ej. Museo, Templo, Parque..." />
                 </div>
-                {/* Otros campos aquí */}
               </form>
             </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={this.handleCloseForm}>Cerrar</button>
-              <button type="button" className="btn btn-primary" onClick={() => isEdit ? this.modifyUser(editUserData.id) : this.addUser()}>Guardar</button>
+            <div className="modal-footer border-top-0 pt-0 gap-2">
+              <button type="button" className="btn btn-light rounded-pill px-4" onClick={this.handleCloseForm}>Cancelar</button>
+              <button type="button" className="btn btn-primary rounded-pill px-4 shadow-sm" onClick={() => isEdit ? this.modifyUser(editUserData.id) : this.addUser()}>Guardar Cambios</button>
             </div>
           </div>
         </div>
@@ -120,37 +116,49 @@ class Categorias extends React.Component {
     const { data, error, showAddEditForm } = this.state;
 
     return (
-      <div className="container mt-3">
-        <h2 className="mb-4">Categorias:</h2>
-        <button className="btn btn-primary mb-2" onClick={() => this.handleShowForm()}>Agregar Categoria</button>
+      <div className="container-fluid fade-in-tab">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h2 className="fw-bold m-0"><i className="bi bi-tags-fill text-primary me-2"></i>Categorías</h2>
+          <button className="btn btn-primary shadow-sm rounded-pill px-4" onClick={() => this.handleShowForm()}>
+            <i className="bi bi-plus-lg me-2"></i>Agregar Categoría
+          </button>
+        </div>
+
         {showAddEditForm && this.renderForm()}
+
         {error ? (
-          <div className="alert alert-danger" role="alert">
-            {error}
+          <div className="alert alert-danger shadow-sm border-0" role="alert">
+            <i className="bi bi-exclamation-triangle-fill me-2"></i>{error}
           </div>
         ) : (
-          <div className="card">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Id</th>
-                  <th>Categoria</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.id}</td>
-                    <td>{item.descripcion}</td>
-                    <td>
-                      <button className="btn btn-secondary btn-sm mr-2" onClick={() => this.handleShowForm(item)}>Editar</button>
-                      <button className="btn btn-danger btn-sm" onClick={() => this.deleteUser(item.id)}>Eliminar</button>
-                    </td>
+          <div className="card-modern border-0">
+            <div className="table-responsive">
+              <table className="table table-hover align-middle">
+                <thead className="table-light">
+                  <tr>
+                    <th className="border-0">Id</th>
+                    <th className="border-0">Categoría</th>
+                    <th className="border-0 text-end">Acciones</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="border-top-0">
+                  {data.map((item, index) => (
+                    <tr key={index}>
+                      <td className="fw-bold text-secondary">#{item.id}</td>
+                      <td className="fw-semibold text-dark">{item.descripcion}</td>
+                      <td className="text-end">
+                        <button className="btn btn-light btn-sm me-2 text-primary" onClick={() => this.handleShowForm(item)}>
+                          <i className="bi bi-pencil-fill"></i>
+                        </button>
+                        <button className="btn btn-light btn-sm text-danger" onClick={() => this.deleteUser(item.id)}>
+                          <i className="bi bi-trash-fill"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>

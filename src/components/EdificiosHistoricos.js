@@ -125,44 +125,43 @@ class EdificiosHistoricos extends React.Component {
     const { editUserData } = this.state;
     const isEdit = editUserData !== null;
 
-    // Formulario básico, se puede expandir con más campos según sea necesario
     return (
-      <div className="modal show" style={{ display: 'block' }}>
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">{isEdit ? 'Editar Edificio Historico' : 'Agregar Edificio Historico'}</h5>
-              <button type="button" className="close" onClick={this.handleCloseForm}>
-                <span>&times;</span>
-              </button>
+      <div className="modal show fade d-block" style={{ backgroundColor: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(3px)', zIndex: 1050 }}>
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content border-0 shadow-lg" style={{ borderRadius: 'var(--radius-lg)' }}>
+            <div className="modal-header border-bottom-0 pb-0">
+              <h5 className="modal-title fw-bold text-dark">{isEdit ? '✏️ Editar Edificio Histórico' : '🏛️ Agregar Edificio Histórico'}</h5>
+              <button type="button" className="btn-close" onClick={this.handleCloseForm} aria-label="Close"></button>
             </div>
-            <div className="modal-body">
+            <div className="modal-body py-3">
               <form>
-                <div className="form-group">
-                  <label>Edificio Historico:</label>
-                  <input type="text" name="descripcion" className="form-control" value={this.state.formData.descripcion} onChange={this.handleFormChange} />
+                <div className="mb-3">
+                  <label className="form-label fw-semibold text-secondary small">Nombre del Edificio:</label>
+                  <input type="text" name="descripcion" className="form-control" value={this.state.formData.descripcion} onChange={this.handleFormChange} placeholder="Ej. Catedral de Zacatecas" />
                 </div>
-                <div className="form-group">
-                  <label>Latitud:</label>
-                  <input type="text" name="latitud" className="form-control" value={this.state.formData.latitud} onChange={this.handleFormChange} />
+                <div className="row g-2 mb-3">
+                  <div className="col">
+                    <label className="form-label fw-semibold text-secondary small">Latitud:</label>
+                    <input type="text" name="latitud" className="form-control" value={this.state.formData.latitud} onChange={this.handleFormChange} placeholder="Ej. 22.77" />
+                  </div>
+                  <div className="col">
+                    <label className="form-label fw-semibold text-secondary small">Longitud:</label>
+                    <input type="text" name="longitud" className="form-control" value={this.state.formData.longitud} onChange={this.handleFormChange} placeholder="Ej. -102.57" />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>Longitud:</label>
-                  <input type="text" name="longitud" className="form-control" value={this.state.formData.longitud} onChange={this.handleFormChange} />
+                <div className="mb-3">
+                  <label className="form-label fw-semibold text-secondary small">Resumen / Contenido:</label>
+                  <textarea name="contenido" className="form-control" rows="3" value={this.state.formData.contenido} onChange={this.handleFormChange} placeholder="Breve reseña histórica..." style={{ resize: 'none' }} />
                 </div>
-                <div className="form-group">
-                  <label>Contenido:</label>
-                  <input type="text" name="contenido" className="form-control" value={this.state.formData.contenido} onChange={this.handleFormChange} />
+                <div className="mb-3">
+                  <label className="form-label fw-semibold text-secondary small">URL Referencia Imagen:</label>
+                  <input type="text" name="referenciaImagen" className="form-control" value={this.state.formData.referenciaImagen} onChange={this.handleFormChange} placeholder="https://ejemplo.com/imagen.jpg" />
                 </div>
-                <div className="form-group">
-                  <label>Referencia Imagen:</label>
-                  <input type="text" name="referenciaImagen" className="form-control" value={this.state.formData.referenciaImagen} onChange={this.handleFormChange} />
-                </div>
-                <div className="form-group">
-                  <label>Categoria:</label>
+                <div className="mb-2">
+                  <label className="form-label fw-semibold text-secondary small">Categoría:</label>
                   <select
                     name="id"
-                    className="form-control"
+                    className="form-select"
                     value={this.state.formData.categoria.id}
                     onChange={this.handleFormChange} >
                     <option value="">Seleccione una categoría</option>
@@ -175,9 +174,9 @@ class EdificiosHistoricos extends React.Component {
                 </div>
               </form>
             </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={this.handleCloseForm}>Cerrar</button>
-              <button type="button" className="btn btn-primary" onClick={() => isEdit ? this.modifyUser(editUserData.id) : this.addUser()}>Guardar</button>
+            <div className="modal-footer border-top-0 pt-0 gap-2">
+              <button type="button" className="btn btn-light rounded-pill px-4" onClick={this.handleCloseForm}>Cancelar</button>
+              <button type="button" className="btn btn-primary rounded-pill px-4 shadow-sm" onClick={() => isEdit ? this.modifyUser(editUserData.id) : this.addUser()}>Guardar Cambios</button>
             </div>
           </div>
         </div>
@@ -189,23 +188,34 @@ class EdificiosHistoricos extends React.Component {
     const { data, error, showAddEditForm } = this.state;
 
     return (
-      <div className="container mt-3">
-        <h2 className="mb-4">Edificios Historicos:</h2>
-        <button className="btn btn-primary mb-2" onClick={() => this.handleShowForm()}>Agregar Edificio Historico</button>
+      <div className="container-fluid fade-in-tab">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h2 className="fw-bold m-0"><i className="bi bi-bank text-primary me-2"></i>Edificios Históricos</h2>
+          <button className="btn btn-primary shadow-sm rounded-pill px-4" onClick={() => this.handleShowForm()}>
+            <i className="bi bi-plus-lg me-2"></i>Agregar Edificio
+          </button>
+        </div>
+
         {showAddEditForm && this.renderForm()}
-        <div className='container'>
-          <div className='row'>
+
+        {error ? (
+          <div className="alert alert-danger shadow-sm border-0" role="alert">
+            <i className="bi bi-exclamation-triangle-fill me-2"></i>{error}
+          </div>
+        ) : (
+          <div className="row g-4">
             {data.map((item) => (
-              <div className='col-md-4' key={item.id}>
-                <Edificio datos={item} />
-                <button className="btn btn-secondary btn-sm mr-2" onClick={() => this.handleShowForm(item)}>Editar</button>
-                <button className="btn btn-danger btn-sm" onClick={() => this.deleteUser(item.id)}>Eliminar</button>
+              <div className="col-12 col-md-6 col-lg-4" key={item.id}>
+                <Edificio 
+                  datos={item} 
+                  onEdit={() => this.handleShowForm(item)}
+                  onDelete={() => this.deleteUser(item.id)}
+                />
               </div>
             ))}
           </div>
-        </div>
+        )}
       </div>
-
     );
   }
 }
