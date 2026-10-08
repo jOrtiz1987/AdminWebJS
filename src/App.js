@@ -27,7 +27,7 @@ function App() {
   };
 
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       {/* Mostrar la barra de navegación solo si el usuario está autenticado */}
       {token && (
         <nav className="navbar navbar-expand-lg navbar-custom">
