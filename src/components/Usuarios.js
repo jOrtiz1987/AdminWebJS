@@ -125,7 +125,7 @@ class Usuarios extends React.Component {
                 </div>
                 <div className="form-group">
                   <label>Clave:</label>
-                  <input type="text" name="password" className="form-control" value={this.state.formData.password} onChange={this.handleFormChange} />
+                  <input type="password" name="password" autoComplete="new-password" placeholder="Dejar vacío para no cambiarla" className="form-control" value={this.state.formData.password || ''} onChange={this.handleFormChange} />
                 </div>
                 <div className="form-group">
                   <label>Genero:</label>

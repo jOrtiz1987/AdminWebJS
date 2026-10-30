@@ -12,7 +12,10 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await axios.post(`${API_BASE_URL}/api/auth/login`, credentials);
-            if (response.data && response.data.jwt) {
+            if (response.data && response.data.jwt && !response.data.admin) {
+                // El panel es solo para administradores (el backend también lo exige)
+                setErrorText('Esta cuenta no tiene permisos de administrador.');
+            } else if (response.data && response.data.jwt) {
                 localStorage.setItem('jwtToken', response.data.jwt);
                 navigate('/');
                 // Recargar la aplicación para que App.js detecte el token y actualice el navbar

@@ -116,6 +116,31 @@ const DataScience = () => {
         reportId ? `${API_BASE_URL}/api/reports/${reportId}/excel` : null
     ), [reportId]);
 
+    // Los mapas requieren sesión de administrador: se descargan con el token (axios agrega
+    // el encabezado Authorization) y se muestran desde una copia local (blob) en un iframe aislado.
+    const [mapasBlob, setMapasBlob] = useState({ heatmap: null, clusters: null });
+    useEffect(() => {
+        if (!heatmapUrl || !clustersUrl) {
+            setMapasBlob({ heatmap: null, clusters: null });
+            return undefined;
+        }
+        let cancelado = false;
+        const creados = [];
+        const cargar = async (url) => {
+            const res = await axios.get(url, { responseType: 'blob' });
+            const objUrl = URL.createObjectURL(new Blob([res.data], { type: 'text/html' }));
+            creados.push(objUrl);
+            return objUrl;
+        };
+        Promise.all([cargar(heatmapUrl), cargar(clustersUrl)])
+            .then(([heatmap, clusters]) => { if (!cancelado) setMapasBlob({ heatmap, clusters }); })
+            .catch((err) => { console.error('No se pudieron cargar los mapas', err); });
+        return () => {
+            cancelado = true;
+            creados.forEach((u) => URL.revokeObjectURL(u));
+        };
+    }, [heatmapUrl, clustersUrl]);
+
     const handleGenerate = async () => {
         setLoadingMeta(true);
         setError(null);
@@ -585,13 +610,14 @@ const DataScience = () => {
                                                 <i className="bi bi-thermometer-sun me-2 text-danger"></i>
                                                 Mapa de Calor (Density Heatmap)
                                             </h5>
-                                            <a className="btn btn-link p-0 text-decoration-none small" href={heatmapUrl} target="_blank" rel="noreferrer">
+                                            <a className="btn btn-link p-0 text-decoration-none small" href={mapasBlob.heatmap || '#'} target="_blank" rel="noreferrer">
                                                 <i className="bi bi-box-arrow-up-right me-1"></i> Expandir
                                             </a>
                                         </div>
                                         <iframe
                                             title="heatmap"
-                                            src={heatmapUrl}
+                                            src={mapasBlob.heatmap || 'about:blank'}
+                                            sandbox="allow-scripts"
                                             style={{ width: '100%', height: 500, border: 0, borderRadius: 8 }}
                                         />
                                     </div>
@@ -604,13 +630,14 @@ const DataScience = () => {
                                                 <i className="bi bi-diagram-3-fill me-2 text-primary"></i>
                                                 Mapa de Clusters Globales (DBSCAN)
                                             </h5>
-                                            <a className="btn btn-link p-0 text-decoration-none small" href={clustersUrl} target="_blank" rel="noreferrer">
+                                            <a className="btn btn-link p-0 text-decoration-none small" href={mapasBlob.clusters || '#'} target="_blank" rel="noreferrer">
                                                 <i className="bi bi-box-arrow-up-right me-1"></i> Expandir
                                             </a>
                                         </div>
                                         <iframe
                                             title="clusters"
-                                            src={clustersUrl}
+                                            src={mapasBlob.clusters || 'about:blank'}
+                                            sandbox="allow-scripts"
                                             style={{ width: '100%', height: 500, border: 0, borderRadius: 8 }}
                                         />
                                     </div>
